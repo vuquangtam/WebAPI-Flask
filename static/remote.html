@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Remote Desktop</title>
+        <style>
+         body { margin: 0 }
+         img { max-width: 100% }
+        </style>
+    </head>
+    <body>
+	<canvas id="screen" />
+        <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+        <script>
+	 $.get("/remote/size", function(size){
+	     var timeoutPeriod = 10;
+	     var imageURI = '/remote/desktop.jpeg';
+	     var x=0, y=0;
+	     var img = new Image();
+	     img.src = imageURI + '?d=' + Date.now();
+	     var canvas = document.getElementById("screen");
+	     var context = canvas.getContext("2d");
+
+	     canvas.width = 1366;
+	     canvas.height = canvas.width * size.height / size.width;
+
+	     fac = size.width / canvas.width
+
+	     img.onload = function() {
+		 context.drawImage(img, x, y, size.width / fac, size.height / fac);
+		 setTimeout(timedRefresh,timeoutPeriod);
+	     };
+
+	     function timedRefresh() {
+		 // just change src attribute, will always trigger the onload callback
+		 img.src = imageURI + '?d=' + Date.now();
+	     }
+
+	     function getMousePos(canvas, evt) {
+		 var rect = canvas.getBoundingClientRect();
+		 return {
+		     x: evt.clientX - rect.left,
+		     y: evt.clientY - rect.top
+		 };
+	     }
+
+             function left_click(event) {
+		 event.preventDefault();
+		 var mousePos = getMousePos(canvas, event);
+		 $.get('/remote/leftClick', {x: 0|fac * mousePos.x,
+					 y: 0|fac * mousePos.y})
+             }
+
+             function right_click(event) {
+		 event.preventDefault();
+		 var mousePos = getMousePos(canvas, event);
+		 $.get('/remote/rightClick', {x: 0|fac * mousePos.x,
+					 y: 0|fac * mousePos.y})
+             }
+
+	     function type_write(event){
+		 if (event.key.length == 1) {
+		     $.get('/remote/typewrite', {data: event.key});
+		 }
+	     }
+             $('#screen').on('click', left_click);
+             $('#screen').on('contextmenu', right_click);
+	     $('body').on('keyup', type_write);
+	 })
+        </script>
+    </body>
+</html>
