@@ -5,7 +5,7 @@ import pyautogui
 class RemoteDesktop:
     def __init__(self):
         self.size = pyautogui.size()
-        self.quality = 100
+        self.quality = 50
 
     def changeQuality(self, quality):
         self.quality = quality

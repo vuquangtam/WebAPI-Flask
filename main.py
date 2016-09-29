@@ -1,21 +1,25 @@
 from flask import Flask, request, send_file, jsonify
 from api.remotedesktop import RemoteDesktop
 import subprocess
-
+import os
 app = Flask(__name__)
 remoteDesktop = RemoteDesktop()
 
 @app.route('/')
 def index():
     return "Welcome to VIPTAM API"
-    
+
 @app.route('/shell')
-def api_article():
+def shell():
+    return app.send_static_file('shell.html')
+    
+@app.route('/shell/get')
+def shellGet():
     command = ""
     result = ""
     try:
         command = request.args.get("cmd")
-        result = subprocess.check_output(command, stderr=subprocess.STDOUT).replace("\n", "<br/>")
+        result = os.popen(command).read()
     except Exception,e:
         print str(e)
     return result

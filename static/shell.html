@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+    <head>
+	<meta charset="UTF-8"/>
+	<title>Shell</title>
+	<style>
+	 input#input {
+	     border: none;
+	 }
+	 textarea#display {
+	     border-radius: 5px;
+	     background: #708090;
+	     color: white;
+	 }
+	</style>
+    </head>
+    <body>
+	<div>
+	    <textarea cols="100" id="display" rows="20"></textarea>
+	</div>
+	<div>
+	    <span><b>VIPTAM > </b></span><input id="input" type="text" value=""/>
+	</div>
+	<script src="//code.jquery.com/jquery-1.11.1.js"></script>
+	<script>
+	 $("#input").focus();
+	 $("#input").keyup(function(event){
+	     if(event.keyCode == 13){
+		 $.get("/shell/get", {cmd: $("#input").val()}, function(data){
+		     $("#display").val(data);
+		     $("#input").val("");
+		 })
+	     }
+	 });
+	</script>
+    </body>
+</html>
