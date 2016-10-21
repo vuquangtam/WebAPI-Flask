@@ -22,6 +22,7 @@ def not_found(error):
 # Import a module / component using its blueprint handler variable (mod_auth)
 from app.mod_remote.controllers import mod_remote as remote_module
 from app.mod_shell.controllers import mod_shell as shell_module
+from app.mod_matmanangcao.controllers import mod_matmanangcao as matmanangcao_module
 from app.mod_auth.controllers import auth
 
 @app.before_request
@@ -37,6 +38,7 @@ def index():
 # Register blueprint(s)
 app.register_blueprint(remote_module)
 app.register_blueprint(shell_module)
+app.register_blueprint(matmanangcao_module)
 
 # Build the database:
 # This will create the database file using SQLAlchemy

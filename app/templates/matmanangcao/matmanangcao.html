@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Document</title>
+	<style>
+	 input {
+	     display: block;
+	 }
+	</style>
+    </head>
+    <body>
+	<div style="float: left">
+	    p <input id="p" type="text" value=""/>
+	    A <input id="A" type="text" value=""/>
+	    B <input id="B" type="text" value=""/>
+	    min_m <input id="min_m" type="text" value=""/>
+	    max_m <input id="max_m" type="text" value=""/>
+	    <input id="elliptic_submit" type="submit" value="Calculate"/>
+	</div>
+	<div id="result" style="float: left; background: #eee; margin-left: 50px">
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+	 function makeTable(data) {
+	     var table = $("<table/>").addClass('CSSTableGenerator');
+	     $.each(data, function(rowIndex, r) {
+		 var row = $("<tr/>");
+		 $.each(r, function(colIndex, c) { 
+		     row.append($("<t"+(rowIndex == 0 ?  "h" : "d")+"/>").text(c));
+		 });
+		 table.append(row);
+	     });
+	     return table;
+	 }
+	 $("#elliptic_submit").click(function(){
+	     $.get("/matmanangcao/api/elliptic/", {p: $("#p").val(), A: $("#A").val(), B: $("#B").val(), min_m: $("#min_m").val(), max_m: $("#max_m").val()}, function(data){
+		 header = ["m", "lm", "lm+l-1", "m'", "f(m')", "V(f(m'))", "(x, y)"]
+		 data.data[1].splice(0, 0, header);
+		 table = makeTable(data.data[1])
+		 $("#result").html("<div>l = p/(mmax+1) = " + $("#p").val() + "/(" + $("#max_m").val() + "+1) = " + data.data[0] + "</div><hr/>");
+		 $("#result").append(table);
+	     })
+	 });
+	</script>
+    </body>
+</html>
