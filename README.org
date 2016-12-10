@@ -1,0 +1,13 @@
+* WebAPI-Flask
+  REST-API written in Flask
+** How to add new blueprint (mini-application)
+*** Create a folder in */app* that contains the new blueprint, ex : *mod_new*
+*** Create  model - view - controller in *mod_new* then create *__init__.py* to make it become module 
+*** Adding new blueprint in */app/__init__.py*
+** How to auto-generate route from function in *mod_tools* module
+*** Declare a module
+    - Module can contain functions
+    - Function must return a value
+    - Function must not duplicate name with reserved name or module (request, Flask .. etc)
+    - If the function is *myFunction(arg1, arg2)*, the route will be *blabla/myFunction?arg1=blabla&arg2=blabla* in *GET* or put the argument in *POST*
+
